@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>H-Barway</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="css/plugins/dataTables/datatables.min.css" rel="stylesheet">
+</head>
+
+<body ng-controller="workAllotmentController">
+    <div id="wrapper">
+
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> <span>
+                                <img alt="image" class="img-circle" src="img/profile_small.jpg" />
+                            </span>
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">User
+                                            Management System</strong>
+                                    </span> <span class="text-muted text-xs block">{{currentUser.UserName}} <b
+                                            class="caret"></b></span>
+                                </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="/profile-details">Profile</a></li>
+                                <li><a ng-click="doLogout()">Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            HB
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/dashboard"><i class="fa fa-th-large"></i> <span
+                                class="nav-label">Dashboards</span></a>
+                    </li>
+                    <li>
+                        <a href="/user-management"><i class="fa fa-address-book"></i> <span class="nav-label">User
+                                Management</span></a>
+                    </li>
+                    <li>
+                        <a href="/user-attendance"><i class="fa fa-users"></i> <span class="nav-label">User
+                                Attendance</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="/work-allotment"><i class="fa fa-tasks"></i> <span class="nav-label">Work
+                                Allotment</span></a>
+                    </li>
+                    <li>
+                        <a href="/work-progress"><i class="fa fa-bookmark"></i> <span class="nav-label">Work
+                                Progress</span></a>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg">
+            <div class="row border-bottom">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                    <div class="navbar-header">
+                        <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i
+                                class="fa fa-bars"></i>
+                        </a>
+                    </div>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                                <i class="fa fa-bell"></i> <span class="label label-warning">16</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-messages">
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="img/a7.jpg">
+                                        </a>
+                                        <div class="media-body">
+                                            <small class="pull-right">46h ago</small>
+                                            <strong>Mike Loreipsum</strong> started following <strong>Monica
+                                                Smith</strong>. <br>
+                                            <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="img/a4.jpg">
+                                        </a>
+                                        <div class="media-body ">
+                                            <small class="pull-right text-navy">5h ago</small>
+                                            <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica
+                                                Smith</strong>. <br>
+                                            <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="dropdown-messages-box">
+                                        <a href="profile.html" class="pull-left">
+                                            <img alt="image" class="img-circle" src="img/profile.jpg">
+                                        </a>
+                                        <div class="media-body ">
+                                            <small class="pull-right">23h ago</small>
+                                            <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                            <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <div class="text-center link-block">
+                                        <a href="mailbox.html">
+                                            <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                        </a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a ng-click="doLogout()">
+                                <i class="fa fa-sign-out"></i> Log out
+                            </a>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>Work</h2>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="active">
+                            <strong>Work Allotment</strong>
+                        </li>
+                    </ol>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+
+            <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+                <div class="ibox-content m-b-sm border-bottom">
+                    <form name="taskForm" ng-submit="createTask()">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Task Name</label>
+                                    <input type="text" name="TaskName" ng-model="TaskName" placeholder="Enter Task Name"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Task Description</label>
+                                    <input type="text" name="TaskDescription" ng-model="TaskDescription"
+                                        placeholder="Task Description" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Serial Number From</label>
+                                    <input type="text" name="SerialNumberFrom" ng-model="SerialNumberFrom"
+                                        placeholder="Enter Serial Number" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Serial Number To</label>
+                                    <input type="text" name="SerialNumberTo" ng-model="SerialNumberTo"
+                                        placeholder="Enter Serial Number" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Total Count</label>
+                                    <input type="number" name="TaskCount" ng-model="TaskCount" placeholder="Enter Count"
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Assigned To</label>
+                                    <select class="form-control" ng-model="selectedUser"
+                                        ng-options="user as user.UserName for user in users track by user.UserId"
+                                        ng-change="selectedUserChanged(selectedUser)" required>
+                                        <option value="" selected>-- Select User --</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">District</label>
+                                    <select class="form-control" ng-model="selectedDistrict"
+                                        ng-options="district as district.Title for district in districts track by district.Id"
+                                        ng-change="selectedDistrictChanged(selectedDistrict)" required>
+                                        <option value="" selected>-- Select District --</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label">Block</label>
+                                        <select class="form-control" ng-model="selectedBlock"
+                                            ng-options="block as block.Title for block in blocks track by block.Id"
+                                            ng-change="selectedBlockChanged(selectedBlock)" required>
+                                            <option value="" selected>-- Select Block --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label class="control-label">Village</label>
+                                        <select class="form-control" ng-model="selectedVillage"
+                                            ng-options="village as village.Title for village in villages track by village.Id"
+                                            ng-change="selectedVillageChanged(selectedVillage)" required>
+                                            <option value="" selected>-- Select Village --</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Task Image</label>
+                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                        <div class="form-control" data-trigger="fileinput"><i
+                                                class="glyphicon glyphicon-file fileinput-exists"></i>
+                                            <span class="fileinput-filename"></span>
+                                        </div>
+                                        <span class="input-group-addon btn btn-default btn-file"><span
+                                                class="fileinput-new">Select file</span><span
+                                                class="fileinput-exists">Change</span>
+                                            <input type="file" name="..." file-model="TaskImage"></span>
+                                        <a href="#" class="input-group-addon btn btn-default fileinput-exists"
+                                            data-dismiss="fileinput">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Task Assigned Date</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input id="taskAssignedDate" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label class="control-label">Task End Ddded</label>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                        <input id="taskEndDate" type="text" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-t col-sm-12 text-center">
+                                <button class="btn btn-white" type="button" ng-click="clearData()">Cancel</button>
+                                <button class="btn btn-primary" type="submit" ng-disabled="taskForm.$invalid">Create
+                                    Task</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-bordered table-hover dataTables-example">
+                                        <thead>
+                                            <tr>
+                                                <th>Task Id</th>
+                                                <th>Task Name</th>
+                                                <th>Task Description</th>
+                                                <th>Assigned By</th>
+                                                <th>Assigned To</th>
+                                                <th>Serial No From</th>
+                                                <th>Serial No To</th>
+                                                <th>Task Count</th>
+                                                <th>District</th>
+                                                <th>Block</th>
+                                                <th>Village</th>
+                                                <th>Assigned Date</th>
+                                                <th>End Date</th>
+                                                <th class="noExport">Task Image</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="gradeX" ng-repeat="task in tasks">
+                                                <td>{{task.TaskId}}</td>
+                                                <td>{{task.TaskName}}</td>
+                                                <td>{{task.TaskDescription}}</td>
+                                                <td>{{task.AssignedBy}}</td>
+                                                <td>{{task.AssignedTo}}</td>
+                                                <td>{{task.SerialNumberFrom}}</td>
+                                                <td>{{task.SerialNumberTo}}</td>
+                                                <td>{{task.TaskCount}}</td>
+                                                <td>{{task.DistrictName}}</td>
+                                                <td>{{task.BlockName}}</td>
+                                                <td>{{task.VillageName}}</td>
+                                                <td>{{task.TaskAssignedDate}}</td>
+                                                <td>{{task.TaskEndDate}}</td>
+                                                <td>
+                                                    <div class="lightBoxGallery">
+                                                        <a href="{{task.TaskImage}}" title="Task Image" data-gallery>
+                                                            <img src="{{task.TaskImage}}"
+                                                                style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Task Name</th>
+                                                <th>Task Description</th>
+                                                <th>Assigned By</th>
+                                                <th>Assigned To</th>
+                                                <th>Serial No From</th>
+                                                <th>Serial No To</th>
+                                                <th>Task Count</th>
+                                                <th>District</th>
+                                                <th>Block</th>
+                                                <th>Village</th>
+                                                <th>Assigned Date</th>
+                                                <th>End Date</th>
+                                                <th class="noExport">Task Image</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="pull-right">
+                    10GB of <strong>250GB</strong> Free.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Example Company &copy; 2014-2017
+                </div>
+            </div>
+        </div>
+
+        <div id="blueimp-gallery" class="blueimp-gallery">
+            <div class="slides"></div>
+            <h3 class="title"></h3>
+            <a class="prev">‹</a>
+            <a class="next">›</a>
+            <a class="close">×</a>
+            <a class="play-pause"></a>
+            <ol class="indicator"></ol>
+        </div>
+
+    </div>
+
+    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="js/inspinia.js"></script>
+    <script src="js/plugins/pace/pace.min.js"></script>
+
+    <!-- Data picker -->
+    <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="js/plugins/jasny/jasny-bootstrap.min.js"></script>
+    <script src="js/plugins/dataTables/datatables.min.js"></script>
+    <script src="js/plugins/toastr/toastr.min.js"></script>
+    <script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+
+    <script src="js/axios.min.js"></script>
+    <script src="js/angular.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controller/workAllotmentController.js"></script>
+    <script src="js/services/authService.js"></script>
+    <script src="js/services/addUserService.js"></script>
+    <script src="js/services/workAllotmentService.js"></script>
+
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function () {
+
+            $('#taskAssignedDate').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            }).datepicker('setDate', new Date());
+
+            $('#taskEndDate').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: false,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true
+            }).datepicker('setDate', new Date());
+        });
+
+    </script>
+</body>
+
+</html>
