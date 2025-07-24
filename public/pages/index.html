@@ -11,6 +11,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <link href="css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+    <link href="css/plugins/dataTables/datatables.min.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 
@@ -284,177 +286,111 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table table-striped">
+                                    <table class="table table-striped table-bordered table-hover dataTables-example">
                                         <thead>
                                             <tr>
-
-                                                <th>#</th>
-                                                <th>Project </th>
-                                                <th>Name </th>
-                                                <th>Phone </th>
-                                                <th>Company </th>
-                                                <th>Completed </th>
-                                                <th>Task</th>
-                                                <th>Date</th>
-                                                <th>Action</th>
+                                                <th>Document Id</th>
+                                                <th>Task Id</th>
+                                                <th>Installed By</th>
+                                                <th>Serial No</th>
+                                                <th>Installation Type</th>
+                                                <th>Is Defective</th>
+                                                <th>Consumer Name</th>
+                                                <th>Consumer No</th>
+                                                <th>Area Pincode</th>
+                                                <th>Post Office</th>
+                                                <th>Police Station</th>
+                                                <th>House Number</th>
+                                                <th>House Address</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th>Upload Location</th>
+                                                <th class="noExport">Old Meter Photo</th>
+                                                <th class="noExport">New Meter Photo</th>
+                                                <th class="noExport">Defective Meter Photo</th>
+                                                <th class="noExport">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Project <small>This is example of project</small></td>
-                                                <td>Patrick Smith</td>
-                                                <td>0800 051213</td>
-                                                <td>Inceptos Hymenaeos Ltd</td>
-                                                <td><span class="pie">0.52/1.561</span></td>
-                                                <td>20%</td>
-                                                <td>Jul 14, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Alpha project</td>
-                                                <td>Alice Jackson</td>
-                                                <td>0500 780909</td>
-                                                <td>Nec Euismod In Company</td>
-                                                <td><span class="pie">6,9</span></td>
-                                                <td>40%</td>
-                                                <td>Jul 16, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Betha project</td>
-                                                <td>John Smith</td>
-                                                <td>0800 1111</td>
-                                                <td>Erat Volutpat</td>
-                                                <td><span class="pie">3,1</span></td>
-                                                <td>75%</td>
-                                                <td>Jul 18, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Gamma project</td>
-                                                <td>Anna Jordan</td>
-                                                <td>(016977) 0648</td>
-                                                <td>Tellus Ltd</td>
-                                                <td><span class="pie">4,9</span></td>
-                                                <td>18%</td>
-                                                <td>Jul 22, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Alpha project</td>
-                                                <td>Alice Jackson</td>
-                                                <td>0500 780909</td>
-                                                <td>Nec Euismod In Company</td>
-                                                <td><span class="pie">6,9</span></td>
-                                                <td>40%</td>
-                                                <td>Jul 16, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Project <small>This is example of project</small></td>
-                                                <td>Patrick Smith</td>
-                                                <td>0800 051213</td>
-                                                <td>Inceptos Hymenaeos Ltd</td>
-                                                <td><span class="pie">0.52/1.561</span></td>
-                                                <td>20%</td>
-                                                <td>Jul 14, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Gamma project</td>
-                                                <td>Anna Jordan</td>
-                                                <td>(016977) 0648</td>
-                                                <td>Tellus Ltd</td>
-                                                <td><span class="pie">4,9</span></td>
-                                                <td>18%</td>
-                                                <td>Jul 22, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Project <small>This is example of project</small></td>
-                                                <td>Patrick Smith</td>
-                                                <td>0800 051213</td>
-                                                <td>Inceptos Hymenaeos Ltd</td>
-                                                <td><span class="pie">0.52/1.561</span></td>
-                                                <td>20%</td>
-                                                <td>Jul 14, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Alpha project</td>
-                                                <td>Alice Jackson</td>
-                                                <td>0500 780909</td>
-                                                <td>Nec Euismod In Company</td>
-                                                <td><span class="pie">6,9</span></td>
-                                                <td>40%</td>
-                                                <td>Jul 16, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>Betha project</td>
-                                                <td>John Smith</td>
-                                                <td>0800 1111</td>
-                                                <td>Erat Volutpat</td>
-                                                <td><span class="pie">3,1</span></td>
-                                                <td>75%</td>
-                                                <td>Jul 18, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Gamma project</td>
-                                                <td>Anna Jordan</td>
-                                                <td>(016977) 0648</td>
-                                                <td>Tellus Ltd</td>
-                                                <td><span class="pie">4,9</span></td>
-                                                <td>18%</td>
-                                                <td>Jul 22, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>Alpha project</td>
-                                                <td>Alice Jackson</td>
-                                                <td>0500 780909</td>
-                                                <td>Nec Euismod In Company</td>
-                                                <td><span class="pie">6,9</span></td>
-                                                <td>40%</td>
-                                                <td>Jul 16, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Project <small>This is example of project</small></td>
-                                                <td>Patrick Smith</td>
-                                                <td>0800 051213</td>
-                                                <td>Inceptos Hymenaeos Ltd</td>
-                                                <td><span class="pie">0.52/1.561</span></td>
-                                                <td>20%</td>
-                                                <td>Jul 14, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>Gamma project</td>
-                                                <td>Anna Jordan</td>
-                                                <td>(016977) 0648</td>
-                                                <td>Tellus Ltd</td>
-                                                <td><span class="pie">4,9</span></td>
-                                                <td>18%</td>
-                                                <td>Jul 22, 2013</td>
-                                                <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
+                                            <tr class="gradeA" ng-repeat="document in documents">
+                                                <td>{{document.DocumentId}}</td>
+                                                <td>{{document.TaskId}}</td>
+                                                <td>{{document.UserName}}</td>
+                                                <td>{{document.SerialNumber}}</td>
+                                                <td>{{document.InstallationType}}</td>
+                                                <td>{{document.IsDefective}}</td>
+                                                <td>{{document.ConsumerName}}</td>
+                                                <td>{{document.ConsumerNumber}}</td>
+                                                <td>{{document.AreaPincode}}</td>
+                                                <td>{{document.PostOffice}}</td>
+                                                <td>{{document.PoliceStation}}</td>
+                                                <td>{{document.HouseNumber}}</td>
+                                                <td>{{document.HouseAddress}}</td>
+                                                <td>{{document.Latitude}}</td>
+                                                <td>{{document.Longitude}}</td>
+                                                <td>{{document.DocumentUploadLocation}}</td>
+                                                <td>
+                                                    <div class="lightBoxGallery" ng-if="document.DocumentOldUrl">
+                                                        <a href="{{document.DocumentOldUrl}}" title="Task Image"
+                                                            data-gallery>
+                                                            <img src="{{document.DocumentOldUrl}}"
+                                                                style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="lightBoxGallery" ng-if="document.DocumentNewUrl">
+                                                        <a href="{{document.DocumentNewUrl}}" title="Task Image"
+                                                            data-gallery>
+                                                            <img src="{{document.DocumentNewUrl}}"
+                                                                style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="lightBoxGallery" ng-if="document.DocumentDefectUrl">
+                                                        <a href="{{document.DocumentDefectUrl}}" title="Task Image"
+                                                            data-gallery>
+                                                            <img src="{{document.DocumentDefectUrl}}"
+                                                                style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;" />
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button class="btn-primary btn btn-xs"
+                                                            ng-if="document.Latitude && document.Longitude"
+                                                            ng-click="onLocationClick(document.Latitude, document.Longitude)">
+                                                            Visit Location
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Document Id</th>
+                                                <th>Task Id</th>
+                                                <th>Installed By</th>
+                                                <th>Serial No</th>
+                                                <th>Installation Type</th>
+                                                <th>Is Defective</th>
+                                                <th>Consumer Name</th>
+                                                <th>Consumer No</th>
+                                                <th>Area Pincode</th>
+                                                <th>Post Office</th>
+                                                <th>Police Station</th>
+                                                <th>House Number</th>
+                                                <th>House Address</th>
+                                                <th>Latitude</th>
+                                                <th>Longitude</th>
+                                                <th>Upload Location</th>
+                                                <th class="noExport">Old Meter Photo</th>
+                                                <th class="noExport">New Meter Photo</th>
+                                                <th class="noExport">Defective Meter Photo</th>
+                                                <th class="noExport">Action</th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
 
@@ -474,6 +410,16 @@
             </div>
 
         </div>
+
+        <div id="blueimp-gallery" class="blueimp-gallery">
+            <div class="slides"></div>
+            <h3 class="title"></h3>
+            <a class="prev">‹</a>
+            <a class="next">›</a>
+            <a class="close">×</a>
+            <a class="play-pause"></a>
+            <ol class="indicator"></ol>
+        </div>
     </div>
 
     <!-- Mainly scripts -->
@@ -488,6 +434,10 @@
 
     <!-- jQuery UI -->
     <script src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
+
+    <script src="js/plugins/footable/footable.all.min.js"></script>
+    <script src="js/plugins/dataTables/datatables.min.js"></script>
 
     <script src="js/plugins/toastr/toastr.min.js"></script>
     <script src="js/axios.min.js"></script>
@@ -496,10 +446,8 @@
     <script src="js/controller/dashboardController.js"></script>
     <script src="js/services/authService.js"></script>
     <script src="js/services/dashboardService.js"></script>
+    <script src="js/services/workProgressService.js"></script>
 
-    <script>
-
-    </script>
 </body>
 
 </html>
