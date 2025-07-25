@@ -1,56 +1,69 @@
 <!DOCTYPE html>
-<html ng-app="myApp">
+<html lang="en" ng-app="myApp">
 
 <head>
-
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>H-Barway</title>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="img/applogo.png" />
+    <link href="css/login.css" rel="stylesheet">
     <link href="css/plugins/toastr/toastr.min.css" rel="stylesheet">
-    <link href="css/animate.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
 
 </head>
 
-<body class="gray-bg" ng-controller="loginController">
-    <div class="middle-box text-center loginscreen animated fadeInDown">
-        <div>
-            <h1 class="logo-name">H-BARWAY</h1>
-            <h3>Admin</h3>
-            <p>Welcome to the H-BARWAY Admin Panel. Please login to manage and monitor the system.</p>
-            <p>Enter your credentials to continue.</p>
-            <form class="m-t" ng-submit="doLogin()">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Mobile Number" ng-model="formData.UserMobileNo"
-                        required />
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" placeholder="Password" ng-model="formData.UserPassword"
-                        required />
-                </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
-
-                <a href="#"><small>Forgot your password?</small></a>
-                <p class="text-muted text-center"><small>Need access? Contact your administrator.</small></p>
+<body ng-controller="loginController">
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Create Account</h1>
+                <span>or use your email for registration</span>
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <button>Sign Up</button>
             </form>
-            <p class="m-t"><small>H-BARWAY INDIA PVT. LTD. &copy; 2025</small></p>
+        </div>
+        <div class="form-container sign-in-container">
+            <form ng-submit="doLogin()">
+                <h1>Login</h1>
+                <span>Please login to continue.</span>
+                <input type="text" placeholder="Mobile Number" ng-model="formData.UserMobileNo" required />
+                <input type="password" placeholder="Password" ng-model="formData.UserPassword" required />
+                <a href="#">Forgot your password?</a>
+                <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Create an Account</h1>
+                    <p>Join H-Barway's Employee Management System to manage tasks, attendance, and more</p>
+                    <button class="ghost" id="signIn">Login</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>H-Barway India Pvt. Ltd.</h1>
+                    <p>Manage your employee records, attendance, and tasks efficiently with our system</p>
+                    <button class="ghost" id="signUp">Get Started</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Mainly scripts -->
+    <footer>
+        <p>
+            © 2025 H-Barway India Pvt. Ltd. — All rights reserved. <br />
+            Designed and developed for internal use as part of the Employee Management System.
+        </p>
+    </footer>
+
+    <script src="js/login.js"></script>
     <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
     <script src="js/plugins/toastr/toastr.min.js"></script>
     <script src="js/axios.min.js"></script>
     <script src="js/angular.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controller/loginController.js"></script>
     <script src="js/services/authService.js"></script>
-
 </body>
 
 </html>
