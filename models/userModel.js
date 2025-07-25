@@ -78,7 +78,7 @@ userModel.getUsers = async (data) => {
         .input('PageNumber', sql.Int, data.PageNumber)
         .input('PageSize', sql.Int, data.PageSize)
         // .query('SELECT UserId, UserName, UserMobileNo, UserAddress, RoleId FROM Emk_Users WHERE IsActive = 1 AND IsDeleted = 0 ORDER BY UserId OFFSET (@PageNumber - 1) * @PageSize ROWS FETCH NEXT @PageSize ROWS ONLY');
-        .query('SELECT t1.UserId, t1.UserName, t1.UserMobileNo, t1.UserEmailAddress, t1.UserAddress, t2.RoleName FROM Emk_Users t1 LEFT JOIN Emk_Roles t2 ON t1.RoleId = t2.RoleId WHERE t1.UserId != 1 AND t1.IsActive = 1 AND t1.IsDeleted = 0 ORDER BY UserId DESC');
+        .query('SELECT t1.UserId, t1.UserName, t1.UserMobileNo, t1.UserEmailAddress, t1.UserAddress, t2.RoleName FROM Emk_Users t1 LEFT JOIN Emk_Roles t2 ON t1.RoleId = t2.RoleId WHERE t1.RoleId != 1 AND t1.IsActive = 1 AND t1.IsDeleted = 0 ORDER BY UserId DESC');
     return result.recordset;
 }
 
