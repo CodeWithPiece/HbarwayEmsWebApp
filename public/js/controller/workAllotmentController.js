@@ -1,5 +1,7 @@
 app.controller('workAllotmentController', async function ($scope, $rootScope, $timeout, workAllotmentService, addUserService) {
 
+    $scope.todayDate = new Date().toISOString().split("T")[0];
+
     $scope.getUsers = async function () {
         await addUserService.getUsers({ Id: $rootScope.currentUser.UserId, PageNumber: 0, PageSize: 0 })
             .then(function (response) {
@@ -139,57 +141,129 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
     };
 
     $scope.createTask = async function () {
-        const formData = new FormData();
-        formData.append('Id', $rootScope.currentUser.UserId);
-        formData.append('UserId', $scope.UserId);
-        formData.append('AssignedBy', $rootScope.currentUser.UserId);
-        formData.append('DistrictId', $scope.DistrictId);
-        formData.append('BlockId', $scope.BlockId);
-        formData.append('VillageId', $scope.VillageId);
-        formData.append('TaskName', $scope.TaskName);
-        formData.append('TaskCount', $scope.TaskCount);
-        formData.append('TaskDescription', $scope.TaskDescription);
-        formData.append('SerialNumberFrom', $scope.SerialNumberFrom);
-        formData.append('SerialNumberTo', $scope.SerialNumberTo);
-        formData.append('TaskAssignedDate', document.getElementById('taskAssignedDate').value);
-        formData.append('TaskEndDate', document.getElementById('taskEndDate').value);
-        if ($scope.TaskImage) {
+        if (checkValidation()) {
+            const formData = new FormData();
+            formData.append('Id', $rootScope.currentUser.UserId);
+            formData.append('UserId', $scope.UserId);
+            formData.append('AssignedBy', $rootScope.currentUser.UserId);
+            formData.append('DistrictId', $scope.DistrictId);
+            formData.append('BlockId', $scope.BlockId);
+            formData.append('VillageId', $scope.VillageId);
+            formData.append('TaskName', $scope.TaskName);
+            formData.append('TaskCount', $scope.TaskCount);
+            formData.append('TaskDescription', $scope.TaskDescription);
+            formData.append('SerialNumberFrom', $scope.SerialNumberFrom);
+            formData.append('SerialNumberTo', $scope.SerialNumberTo);
+            formData.append('TaskAssignedDate', $scope.formatToSQLDateTime($scope.TaskAssignedDate));
+            formData.append('TaskEndDate', $scope.formatToSQLDateTime($scope.TaskEndDate));
             formData.append('TaskImage', $scope.TaskImage);
+
+            await workAllotmentService.createTask(formData)
+                .then(function (response) {
+                    if (response.data.status) {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-right'
+                        };
+                        toastr.success('Employee management system', `${response.data.message}`);
+                        $timeout(function () {
+                            $scope.clearData();
+                            $scope.getTasks();
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    console.error('API Error:', error.response.data);
+                    if (error.response.data.message.toLowerCase().includes("token")) {
+                        sessionStorage.removeItem('user');
+                        window.location.href = "/";
+                    } else {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-right'
+                        };
+                        toastr.error('Employee management system', error.response.data.message);
+                    }
+                });
         }
-        await workAllotmentService.createTask(formData)
-            .then(function (response) {
-                if (response.data.status) {
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        showMethod: 'slideDown',
-                        timeOut: 1500,
-                        positionClass: 'toast-bottom-right'
-                    };
-                    toastr.success('Employee management system', `${response.data.message}`);
-                    $timeout(function () {
-                        $scope.clearData();
-                        $scope.getTasks();
-                    });
-                }
-            })
-            .catch(function (error) {
-                console.error('API Error:', error.response.data);
-                if (error.response.data.message.toLowerCase().includes("token")) {
-                    sessionStorage.removeItem('user');
-                    window.location.href = "/";
-                } else {
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        showMethod: 'slideDown',
-                        timeOut: 1500,
-                        positionClass: 'toast-bottom-right'
-                    };
-                    toastr.error('Employee management system', error.response.data.message);
-                }
-            });
     };
+
+    $scope.formatToSQLDateTime = function (dateInput) {
+        const date = new Date(dateInput);
+        const pad = (n) => n.toString().padStart(2, '0');
+        const ms = (n) => n.toString().padStart(3, '0');
+        const istDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        const yyyy = istDate.getFullYear();
+        const mm = pad(istDate.getMonth() + 1);
+        const dd = pad(istDate.getDate());
+        const hh = pad(istDate.getHours());
+        const mi = pad(istDate.getMinutes());
+        const ss = pad(istDate.getSeconds());
+        const mss = ms(istDate.getMilliseconds());
+        return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}.${mss}`;
+    };
+
+    function checkValidation() {
+        if (!$scope.TaskName || $scope.TaskName.trim() === "") {
+            showToast('error', 'Employee Management System', 'Task name is required.');
+            return false;
+        }
+        if (!$scope.TaskDescription || $scope.TaskDescription.trim() === "") {
+            showToast('error', 'Employee Management System', 'Task description is required.');
+            return false;
+        }
+        if (!$scope.SerialNumberFrom || $scope.SerialNumberFrom < 1 || !$scope.SerialNumberTo || $scope.SerialNumberTo < 1) {
+            showToast('error', 'Employee Management System', 'Serial no is required.');
+            return false;
+        }
+        if (!$scope.TaskCount) {
+            showToast('error', 'Employee Management System', 'Total count is required.');
+            return false;
+        }
+        if ($scope.TaskCount < 1) {
+            showToast('error', 'Employee Management System', 'Enter valid total count.');
+            return false;
+        }
+        if (!$scope.UserId) {
+            showToast('error', 'Employee Management System', 'Select user to assign.');
+            return false;
+        }
+        if (!$scope.DistrictId) {
+            showToast('error', 'Employee Management System', 'District is required.');
+            return false;
+        }
+        if (!$scope.BlockId) {
+            showToast('error', 'Employee Management System', 'Block is required.');
+            return false;
+        }
+        if (!$scope.VillageId) {
+            showToast('error', 'Employee Management System', 'Village is required.');
+            return false;
+        }
+        if (!$scope.TaskImage) {
+            showToast('error', 'Employee Management System', 'Task image is required.');
+            return false;
+        }
+        if (!$scope.TaskAssignedDate) {
+            showToast('error', 'Employee Management System', 'Assign date is required.');
+            return false;
+        }
+        if (!$scope.TaskEndDate) {
+            showToast('error', 'Employee Management System', 'End date is required.');
+            return false;
+        }
+        if (new Date($scope.TaskEndDate) < new Date($scope.TaskAssignedDate)) {
+            showToast('error', 'Employee Management System', 'Assign date must be greater or equal to end date.');
+            return false;
+        }
+        return true;
+    }
 
     $scope.getTasks = async function () {
         await workAllotmentService.getTasks({ Id: $rootScope.currentUser.UserId, UserId: $rootScope.currentUser.UserId })
@@ -317,6 +391,33 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
         $scope.selectedVillage = null;
         $('.fileinput').removeClass('fileinput-exists').addClass('fileinput-new');
         $('.fileinput .fileinput-filename').text('');
+    }
+
+    function showToast(type, title, message) {
+        toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            showMethod: 'slideDown',
+            timeOut: 1500,
+            positionClass: 'toast-bottom-right'
+        };
+
+        switch (type) {
+            case 'success':
+                toastr.success(message, title);
+                break;
+            case 'error':
+                toastr.error(message, title);
+                break;
+            case 'info':
+                toastr.info(message, title);
+                break;
+            case 'warning':
+                toastr.warning(message, title);
+                break;
+            default:
+                console.warn("Invalid toast type: " + type);
+        }
     }
 
     await $scope.getUsers();

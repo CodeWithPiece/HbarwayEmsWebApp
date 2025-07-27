@@ -15,7 +15,6 @@
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
-    <link href="css/plugins/datapicker/datepicker3.css" rel="stylesheet">
     <link href="css/plugins/dataTables/datatables.min.css" rel="stylesheet">
 </head>
 
@@ -106,89 +105,102 @@
 
             <div class="wrapper wrapper-content animated fadeInRight ecommerce">
                 <div class="ibox-content m-b-sm border-bottom">
-                    <form name="taskForm" ng-submit="createTask()">
+                    <form name="taskForm" novalidate ng-submit="createTask()">
                         <div class="row">
+                            <!-- Task Name -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.TaskName.$touched && taskForm.TaskName.$invalid}">
                                     <label class="control-label">Task Name</label>
                                     <input type="text" name="TaskName" ng-model="TaskName" placeholder="Enter Task Name"
-                                        class="form-control">
+                                        class="form-control" required>
                                 </div>
                             </div>
+                            <!-- Task Description -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.TaskDescription.$touched && taskForm.TaskDescription.$invalid}">
                                     <label class="control-label">Task Description</label>
                                     <input type="text" name="TaskDescription" ng-model="TaskDescription"
-                                        placeholder="Task Description" class="form-control">
+                                        placeholder="Enter Task Description" class="form-control" required>
                                 </div>
                             </div>
+                            <!-- Serial Number From -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.SerialNumberFrom.$touched && taskForm.SerialNumberFrom.$invalid}">
                                     <label class="control-label">Serial Number From</label>
                                     <input type="text" name="SerialNumberFrom" ng-model="SerialNumberFrom"
-                                        placeholder="Enter Serial Number" class="form-control">
+                                        placeholder="Enter Serial No" class="form-control" min="1" required>
                                 </div>
                             </div>
+                            <!-- Serial Number To -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.SerialNumberTo.$touched && taskForm.SerialNumberTo.$invalid}">
                                     <label class="control-label">Serial Number To</label>
                                     <input type="text" name="SerialNumberTo" ng-model="SerialNumberTo"
-                                        placeholder="Enter Serial Number" class="form-control">
+                                        placeholder="Enter Serial No" class="form-control" min="1" required>
                                 </div>
                             </div>
+                            <!-- Task Count -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.TaskCount.$touched && taskForm.TaskCount.$invalid}">
                                     <label class="control-label">Total Count</label>
-                                    <input type="number" name="TaskCount" ng-model="TaskCount" placeholder="Enter Count"
-                                        class="form-control">
+                                    <input type="number" name="TaskCount" ng-model="TaskCount"
+                                        placeholder="Enter Total Count" class="form-control" min="1" required>
                                 </div>
                             </div>
+                            <!-- Assigned User -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.selectedUser.$touched && !selectedUser}">
                                     <label class="control-label">Assigned To</label>
-                                    <select class="form-control" ng-model="selectedUser"
+                                    <select class="form-control" name="selectedUser" ng-model="selectedUser"
                                         ng-options="user as user.UserName for user in users track by user.UserId"
                                         ng-change="selectedUserChanged(selectedUser)" required>
-                                        <option value="" selected>-- Select User --</option>
+                                        <option value="">-- Select User --</option>
                                     </select>
-
                                 </div>
                             </div>
+                            <!-- District -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.selectedDistrict.$touched && !selectedDistrict}">
                                     <label class="control-label">District</label>
-                                    <select class="form-control" ng-model="selectedDistrict"
-                                        ng-options="district as district.Title for district in districts track by district.Id"
+                                    <select class="form-control" name="selectedDistrict" ng-model="selectedDistrict"
+                                        ng-options="d as d.Title for d in districts track by d.Id"
                                         ng-change="selectedDistrictChanged(selectedDistrict)" required>
-                                        <option value="" selected>-- Select District --</option>
+                                        <option value="">-- Select District --</option>
                                     </select>
-
                                 </div>
                             </div>
+                            <!-- Block -->
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label class="control-label">Block</label>
-                                        <select class="form-control" ng-model="selectedBlock"
-                                            ng-options="block as block.Title for block in blocks track by block.Id"
-                                            ng-change="selectedBlockChanged(selectedBlock)" required>
-                                            <option value="" selected>-- Select Block --</option>
-                                        </select>
-                                    </div>
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.selectedBlock.$touched && !selectedBlock}">
+                                    <label class="control-label">Block</label>
+                                    <select class="form-control" name="selectedBlock" ng-model="selectedBlock"
+                                        ng-options="b as b.Title for b in blocks track by b.Id"
+                                        ng-change="selectedBlockChanged(selectedBlock)" required>
+                                        <option value="">-- Select Block --</option>
+                                    </select>
                                 </div>
                             </div>
+                            <!-- Village -->
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label class="control-label">Village</label>
-                                        <select class="form-control" ng-model="selectedVillage"
-                                            ng-options="village as village.Title for village in villages track by village.Id"
-                                            ng-change="selectedVillageChanged(selectedVillage)" required>
-                                            <option value="" selected>-- Select Village --</option>
-                                        </select>
-                                    </div>
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.selectedVillage.$touched && !selectedVillage}">
+                                    <label class="control-label">Village</label>
+                                    <select class="form-control" name="selectedVillage" ng-model="selectedVillage"
+                                        ng-options="v as v.Title for v in villages track by v.Id"
+                                        ng-change="selectedVillageChanged(selectedVillage)" required>
+                                        <option value="">-- Select Village --</option>
+                                    </select>
                                 </div>
                             </div>
+                            <!-- Task Image -->
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label class="control-label">Task Image</label>
@@ -206,28 +218,28 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <!-- Task Assigned Date -->
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.TaskAssignedDate.$touched && !TaskAssignedDate}">
                                     <label class="control-label">Task Assigned Date</label>
-                                    <div class="input-group date">
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <input id="taskAssignedDate" type="text" class="form-control">
-                                    </div>
+                                    <input type="date" class="form-control" name="TaskAssignedDate"
+                                        ng-model="TaskAssignedDate" min="{{ todayDate }}">
                                 </div>
                             </div>
+                            <!-- Task End Date -->
                             <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label class="control-label">Task End Ddded</label>
-                                    <div class="input-group date">
-                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                        <input id="taskEndDate" type="text" class="form-control">
-                                    </div>
+                                <div class="form-group"
+                                    ng-class="{'has-error': taskForm.TaskEndDate.$touched && !TaskEndDate}">
+                                    <label class="control-label">Task End Date</label>
+                                    <input type="date" class="form-control" name="TaskEndDate" ng-model="TaskEndDate"
+                                        min="{{ todayDate }}">
                                 </div>
                             </div>
-                            <div class="m-t col-sm-12 text-center">
-                                <button class="btn btn-white" type="button" ng-click="clearData()">Cancel</button>
-                                <button class="btn btn-primary" type="submit" ng-disabled="taskForm.$invalid">Create
+                            <!-- Submit -->
+                            <div class="col-sm-12 text-center">
+                                <button type="button" class="btn btn-white" ng-click="clearData()">Cancel</button>
+                                <button type="submit" class="btn btn-primary" ng-disabled="taskForm.$invalid">Create
                                     Task</button>
                             </div>
                         </div>
@@ -285,6 +297,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                <th>Task Id</th>
                                                 <th>Task Name</th>
                                                 <th>Task Description</th>
                                                 <th>Assigned By</th>
@@ -339,7 +352,6 @@
     <script src="js/plugins/pace/pace.min.js"></script>
 
     <!-- Data picker -->
-    <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
     <script src="js/plugins/jasny/jasny-bootstrap.min.js"></script>
     <script src="js/plugins/dataTables/datatables.min.js"></script>
     <script src="js/plugins/toastr/toastr.min.js"></script>
@@ -352,29 +364,6 @@
     <script src="js/services/authService.js"></script>
     <script src="js/services/addUserService.js"></script>
     <script src="js/services/workAllotmentService.js"></script>
-
-    <!-- Page-Level Scripts -->
-    <script>
-        $(document).ready(function () {
-
-            $('#taskAssignedDate').datepicker({
-                todayBtn: "linked",
-                keyboardNavigation: false,
-                forceParse: false,
-                calendarWeeks: true,
-                autoclose: true
-            }).datepicker('setDate', new Date());
-
-            $('#taskEndDate').datepicker({
-                todayBtn: "linked",
-                keyboardNavigation: false,
-                forceParse: false,
-                calendarWeeks: true,
-                autoclose: true
-            }).datepicker('setDate', new Date());
-        });
-
-    </script>
 </body>
 
 </html>
