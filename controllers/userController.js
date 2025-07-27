@@ -64,9 +64,13 @@ exports.checkInAndOut = async (req, res) => {
     try {
         const response = await userModel.checkInAndOut(req.body);
         const dbLog = response[0].CheckId;
-        if (dbLog == 1 || dbLog == 2) {
-            return res.status(200).json({ status: true, message: "Attendance updated successfully." });
-        } else {
+        console.log(dbLog);
+        if (dbLog == 0) {
+            return res.status(200).json({ status: true, message: "Attendance already marked for today.", });
+        } else if (dbLog == 1) {
+            return res.status(200).json({ status: true, message: "Your attendance has been recorded." });
+        }
+        else {
             return res.status(400).json({ status: false, message: "Attendance marked failed." });
         }
     } catch (err) {
