@@ -1,7 +1,5 @@
 app.controller('userAttendanceController', async function ($scope, $rootScope, $timeout, addUserService) {
 
-    $scope.AttendanceDate = new Date().toLocaleDateString('en-CA');
-
     $scope.getUsersAttendance = async function (UserName, UserMobileNo, AttendanceDate) {
         await addUserService.getUsersAttendance({ Id: $rootScope.currentUser.UserId, UserName, UserMobileNo, AttendanceDate })
             .then(function (response) {
@@ -124,8 +122,8 @@ app.controller('userAttendanceController', async function ($scope, $rootScope, $
     $scope.clearData = async function () {
         $scope.UserName = '';
         $scope.UserMobileNo = '';
-        await $scope.getUsersAttendance('', '', $scope.AttendanceDate);
+        await $scope.getUsersAttendance('', '', '');
     }
 
-    await $scope.getUsersAttendance('', '', $scope.AttendanceDate);
+    await $scope.getUsersAttendance('', '', '');
 });

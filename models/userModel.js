@@ -83,7 +83,8 @@ userModel.getUsers = async (data) => {
 }
 
 userModel.getUsersAttendace = async (data) => {
-    let query = 'SELECT t2.UserName, t2.UserMobileNo, t3.RoleName, t1.InLocation, t1.OutLocation, t1.InLatitude, t1.InLongitude, t1.OutLatitude, t1.OutLongitude, CONVERT(VARCHAR(8), t1.InTime, 108) AS InTime, CONVERT(VARCHAR(8), t1.OutTime, 108) AS OutTime, t1.IsLogin, t1.IsLogout FROM Emk_UserLogs t1 LEFT JOIN Emk_Users t2 ON t1.UserId = t2.UserId LEFT JOIN Emk_Roles t3 ON t2.RoleId = t3.RoleId WHERE t1.IsActive = 1 AND t1.IsDeleted = 0';
+    let query = "SELECT t2.UserName, CONVERT(VARCHAR(10), t1.CreatedOn, 120) AS AttendanceDate, t2.UserMobileNo, t3.RoleName, t1.InLocation, t1.OutLocation, t1.InLatitude, t1.InLongitude, t1.OutLatitude, t1.OutLongitude, FORMAT(t1.InTime, 'hh: mm tt') AS InTime, FORMAT(t1.OutTime, 'hh:mm tt') AS OutTime, t1.IsLogin, t1.IsLogout FROM Emk_UserLogs t1 LEFT JOIN Emk_Users t2 ON t1.UserId = t2.UserId LEFT JOIN Emk_Roles t3 ON t2.RoleId = t3.RoleId WHERE t1.IsActive = 1 AND t1.IsDeleted = 0";
+
     if (data.AttendanceDate) {
         query += ` AND CAST(t1.CreatedOn AS DATE) = CAST('${data.AttendanceDate}' AS DATE)`;
     }
