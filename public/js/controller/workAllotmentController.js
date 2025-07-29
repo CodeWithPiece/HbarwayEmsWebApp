@@ -436,6 +436,10 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
         $scope.selectedVillage = null;
         $scope.TaskAssignedDate = null;
         $scope.TaskEndDate = null;
+        $scope.TaskId = null;
+        $scope.UserId = null;
+        $scope.DistrictId = null;
+        $scope.BlockId = null;
         $('.fileinput').removeClass('fileinput-exists').addClass('fileinput-new');
         $('.fileinput .fileinput-filename').text('');
     }

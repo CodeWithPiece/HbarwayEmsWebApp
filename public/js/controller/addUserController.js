@@ -164,7 +164,7 @@ app.controller('addUserController', async function ($scope, $rootScope, $timeout
                                         orientation: 'landscape',
                                         pageSize: 'A4',
                                         exportOptions: {
-                                            columns: ':not(:last-child)'
+                                            columns: 'th:not(.noExport)'
                                         },
                                         customize: function (doc) {
                                             doc.defaultStyle.fontSize = 8;
@@ -198,7 +198,7 @@ app.controller('addUserController', async function ($scope, $rootScope, $timeout
                                     {
                                         extend: 'print',
                                         exportOptions: {
-                                            columns: ':not(.noExport)'
+                                            columns: 'th:not(.noExport)'
                                         },
                                         customize: function (win) {
                                             $(win.document.body).addClass('white-bg');
@@ -240,6 +240,7 @@ app.controller('addUserController', async function ($scope, $rootScope, $timeout
         $scope.registerData.UserAddress = "";
         $scope.selectedRole = null;
         $scope.registerData.UserPassword = "";
+        $scope.UserId = null;
     }
     await $scope.loadRoles();
     await $scope.getUsers();
