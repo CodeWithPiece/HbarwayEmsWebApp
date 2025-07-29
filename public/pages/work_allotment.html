@@ -188,18 +188,6 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- Village -->
-                            <div class="col-sm-4">
-                                <div class="form-group"
-                                    ng-class="{'has-error': taskForm.selectedVillage.$touched && !selectedVillage}">
-                                    <label class="control-label">Village</label>
-                                    <select class="form-control" name="selectedVillage" ng-model="selectedVillage"
-                                        ng-options="v as v.Title for v in villages track by v.Id"
-                                        ng-change="selectedVillageChanged(selectedVillage)" required>
-                                        <option value="">-- Select Village --</option>
-                                    </select>
-                                </div>
-                            </div>
                             <!-- Task Image -->
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -239,8 +227,11 @@
                             <!-- Submit -->
                             <div class="col-sm-12 text-center">
                                 <button type="button" class="btn btn-white" ng-click="clearData()">Cancel</button>
-                                <button type="submit" class="btn btn-primary" ng-disabled="taskForm.$invalid">Create
-                                    Task</button>
+                                <!-- <button type="submit" class="btn btn-primary" ng-disabled="taskForm.$invalid">Create
+                                    Task</button> -->
+                                <button type="submit" class="btn btn-primary" ng-disabled="taskForm.$invalid">
+                                    {{ TaskId ? 'Update Task' : 'Create Task' }}
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -258,16 +249,19 @@
                                                 <th>Task Name</th>
                                                 <th>Task Description</th>
                                                 <th>Assigned By</th>
+                                                <th style="display: none;" class="noExport">Assigned To Id</th>
                                                 <th>Assigned To</th>
                                                 <th>Serial No From</th>
                                                 <th>Serial No To</th>
                                                 <th>Task Count</th>
+                                                <th style="display: none;" class="noExport">District Id</th>
                                                 <th>District</th>
+                                                <th style="display: none;" class="noExport">Block Id</th>
                                                 <th>Block</th>
-                                                <th>Village</th>
                                                 <th>Assigned Date</th>
                                                 <th>End Date</th>
                                                 <th class="noExport">Task Image</th>
+                                                <th class="noExport">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -276,13 +270,15 @@
                                                 <td>{{task.TaskName}}</td>
                                                 <td>{{task.TaskDescription}}</td>
                                                 <td>{{task.AssignedBy}}</td>
+                                                <td style="display: none;">{{task.AssignedToId}}</td>
                                                 <td>{{task.AssignedTo}}</td>
                                                 <td>{{task.SerialNumberFrom}}</td>
                                                 <td>{{task.SerialNumberTo}}</td>
                                                 <td>{{task.TaskCount}}</td>
+                                                <td style="display: none;">{{task.DistrictId}}</td>
                                                 <td>{{task.DistrictName}}</td>
+                                                <td style="display: none;">{{task.BlockId}}</td>
                                                 <td>{{task.BlockName}}</td>
-                                                <td>{{task.VillageName}}</td>
                                                 <td>{{task.TaskAssignedDate}}</td>
                                                 <td>{{task.TaskEndDate}}</td>
                                                 <td>
@@ -293,6 +289,14 @@
                                                         </a>
                                                     </div>
                                                 </td>
+                                                <td>
+                                                    <div class="btn-group">
+                                                        <button class="btn-white btn btn-xs"
+                                                            ng-click="editTask(task)">Update
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -301,16 +305,19 @@
                                                 <th>Task Name</th>
                                                 <th>Task Description</th>
                                                 <th>Assigned By</th>
+                                                <th style="display: none;" class="noExport">Assigned To Id</th>
                                                 <th>Assigned To</th>
                                                 <th>Serial No From</th>
                                                 <th>Serial No To</th>
                                                 <th>Task Count</th>
+                                                <th style="display: none;" class="noExport">District Id</th>
                                                 <th>District</th>
+                                                <th style="display: none;" class="noExport">Block Id</th>
                                                 <th>Block</th>
-                                                <th>Village</th>
                                                 <th>Assigned Date</th>
                                                 <th>End Date</th>
                                                 <th class="noExport">Task Image</th>
+                                                <th class="noExport">Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>

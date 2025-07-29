@@ -102,53 +102,39 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
         if (selectedBlock) {
             // console.log("Selected Bokaro:", selectedBlock.Id, selectedBlock.Title);
             $scope.BlockId = selectedBlock.Id;
-            $scope.getVillagesByBlock(selectedBlock.Id);
         }
     };
 
-    $scope.getVillagesByBlock = async function (BlockId) {
-        await workAllotmentService.getVillagesByBlock({ Id: $rootScope.currentUser.UserId, BlockId })
-            .then(function (response) {
-                if (response.data.status) {
-                    $timeout(function () {
-                        $scope.villages = response.data.data;
-                    });
-                }
-            })
-            .catch(function (error) {
-                console.error('API Error:', error.response.data);
-                if (error.response.data.message.toLowerCase().includes("token")) {
-                    sessionStorage.removeItem('user');
-                    window.location.href = "/";
-                } else {
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        showMethod: 'slideDown',
-                        timeOut: 1500,
-                        positionClass: 'toast-bottom-right'
-                    };
-                    toastr.error('Employee management system', error.response.data.message);
-                }
-            });
-    };
-
-    $scope.selectedVillageChanged = function (selectedVillage) {
-        if (selectedVillage) {
-            // console.log("Selected Village:", selectedVillage.Id, selectedVillage.Title);
-            $scope.VillageId = selectedVillage.Id;
-        }
+    $scope.editTask = function (task) {
+        $scope.TaskId = task.TaskId;
+        $scope.UserId = task.AssignedToId;
+        $scope.TaskName = task.TaskName;
+        $scope.TaskImageUrl = task.TaskImage;
+        $scope.TaskDescription = task.TaskDescription;
+        $scope.SerialNumberFrom = task.SerialNumberFrom;
+        $scope.SerialNumberTo = task.SerialNumberTo;
+        $scope.TaskCount = task.TaskCount;
+        $scope.TaskAssignedDate = new Date(task.TaskAssignedDate);
+        $scope.TaskEndDate = new Date(task.TaskEndDate);
+        $scope.DistrictId = task.DistrictId;
+        $scope.BlockId = task.BlockId;
+        $scope.selectedUser = $scope.users.find(u => u.UserId === task.AssignedToId);
+        $scope.selectedDistrict = $scope.districts.find(d => d.Id === task.DistrictId);
+        $scope.getBlocksByDistrict(task.DistrictId);
+        $timeout(function () {
+            $scope.selectedBlock = $scope.blocks.find(d => d.Id === task.BlockId);
+        }, 100);
     };
 
     $scope.createTask = async function () {
-        if (checkValidation()) {
+        if ($scope.TaskId) {
             const formData = new FormData();
+            formData.append('TaskId', $scope.TaskId);
             formData.append('Id', $rootScope.currentUser.UserId);
             formData.append('UserId', $scope.UserId);
             formData.append('AssignedBy', $rootScope.currentUser.UserId);
             formData.append('DistrictId', $scope.DistrictId);
             formData.append('BlockId', $scope.BlockId);
-            formData.append('VillageId', $scope.VillageId);
             formData.append('TaskName', $scope.TaskName);
             formData.append('TaskCount', $scope.TaskCount);
             formData.append('TaskDescription', $scope.TaskDescription);
@@ -156,9 +142,12 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
             formData.append('SerialNumberTo', $scope.SerialNumberTo);
             formData.append('TaskAssignedDate', $scope.formatToSQLDateTime($scope.TaskAssignedDate));
             formData.append('TaskEndDate', $scope.formatToSQLDateTime($scope.TaskEndDate));
-            formData.append('TaskImage', $scope.TaskImage);
+            if ($scope.TaskImage && $scope.TaskImage.name) {
+                formData.append('TaskImageUrl', $scope.TaskImageUrl);
+                formData.append('TaskImage', $scope.TaskImage);
+            }
 
-            await workAllotmentService.createTask(formData)
+            await workAllotmentService.updateTask(formData)
                 .then(function (response) {
                     if (response.data.status) {
                         toastr.options = {
@@ -172,6 +161,10 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
                         $timeout(function () {
                             $scope.clearData();
                             $scope.getTasks();
+                            $scope.TaskId = null;
+                            $scope.UserId = null;
+                            $scope.DistrictId = null;
+                            $scope.BlockId = null;
                         });
                     }
                 })
@@ -191,6 +184,57 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
                         toastr.error('Employee management system', error.response.data.message);
                     }
                 });
+        } else {
+            if (checkValidation()) {
+                const formData = new FormData();
+                formData.append('Id', $rootScope.currentUser.UserId);
+                formData.append('UserId', $scope.UserId);
+                formData.append('AssignedBy', $rootScope.currentUser.UserId);
+                formData.append('DistrictId', $scope.DistrictId);
+                formData.append('BlockId', $scope.BlockId);
+                formData.append('TaskName', $scope.TaskName);
+                formData.append('TaskCount', $scope.TaskCount);
+                formData.append('TaskDescription', $scope.TaskDescription);
+                formData.append('SerialNumberFrom', $scope.SerialNumberFrom);
+                formData.append('SerialNumberTo', $scope.SerialNumberTo);
+                formData.append('TaskAssignedDate', $scope.formatToSQLDateTime($scope.TaskAssignedDate));
+                formData.append('TaskEndDate', $scope.formatToSQLDateTime($scope.TaskEndDate));
+                formData.append('TaskImage', $scope.TaskImage);
+
+                await workAllotmentService.createTask(formData)
+                    .then(function (response) {
+                        if (response.data.status) {
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 1500,
+                                positionClass: 'toast-bottom-right'
+                            };
+                            toastr.success('Employee management system', `${response.data.message}`);
+                            $timeout(function () {
+                                $scope.clearData();
+                                $scope.getTasks();
+                            });
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error('API Error:', error.response.data);
+                        if (error.response.data.message.toLowerCase().includes("token")) {
+                            sessionStorage.removeItem('user');
+                            window.location.href = "/";
+                        } else {
+                            toastr.options = {
+                                closeButton: true,
+                                progressBar: true,
+                                showMethod: 'slideDown',
+                                timeOut: 1500,
+                                positionClass: 'toast-bottom-right'
+                            };
+                            toastr.error('Employee management system', error.response.data.message);
+                        }
+                    });
+            }
         }
     };
 
@@ -242,10 +286,6 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
             showToast('error', 'Employee Management System', 'Block is required.');
             return false;
         }
-        if (!$scope.VillageId) {
-            showToast('error', 'Employee Management System', 'Village is required.');
-            return false;
-        }
         if (!$scope.TaskImage) {
             showToast('error', 'Employee Management System', 'Task image is required.');
             return false;
@@ -285,60 +325,65 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
                                 dom: '<"html5buttons"B>lTfgitp',
                                 buttons: [
                                     { extend: 'copy' },
-                                    { extend: 'csv', title: 'Tasks' },
-                                    { extend: 'excel', title: 'Tasks' },
+                                    {
+                                        extend: 'csv',
+                                        title: 'Tasks',
+                                        exportOptions: {
+                                            columns: 'th:not(.noExport)'
+                                        },
+                                    },
+                                    {
+                                        extend: 'excel',
+                                        title: 'Tasks',
+                                        exportOptions: {
+                                            columns: 'th:not(.noExport)'
+                                        },
+                                    },
                                     {
                                         extend: 'pdf',
                                         title: 'Tasks',
                                         orientation: 'landscape',
                                         pageSize: 'A4',
                                         exportOptions: {
-                                            columns: ':not(:last-child)'
+                                            columns: 'th:not(.noExport)'
                                         },
                                         customize: function (doc) {
                                             doc.defaultStyle.fontSize = 8;
                                             doc.styles.tableHeader.fontSize = 9;
                                             doc.styles.title.fontSize = 12;
-                                            doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
 
-                                            // Explicit column widths (adjust as needed)
-                                            doc.content[1].table.widths = [
-                                                '5%',   // Task Id
-                                                '8%',   // Task Name
-                                                '15%',   // Task Description
-                                                '8%',   // Assigned By
-                                                '8%',   // Assigned To
-                                                '6%',  // Sl No From
-                                                '6%',   // Sl No To
-                                                '6%',   // Task Count
-                                                '8%',   // District
-                                                '8%',   // Block
-                                                '8%',   // Village
-                                                '6%',  // Assigned Date
-                                                '6%',   // End Date
-                                            ];
+                                            if (
+                                                doc.content &&
+                                                doc.content[1] &&
+                                                doc.content[1].table &&
+                                                doc.content[1].table.body
+                                            ) {
+                                                doc.content[1].table.widths = [
+                                                    '8%', '8%', '20%', '8%', '8%', '6%',
+                                                    '6%', '6%', '8%', '8%', '6%', '6%'
+                                                ];
 
-                                            // Center vertically and align text left
-                                            var tableBody = doc.content[1].table.body;
-                                            for (let i = 0; i < tableBody.length; i++) {
-                                                for (let j = 0; j < tableBody[i].length; j++) {
-                                                    tableBody[i][j].alignment = 'left'; // horizontal
-                                                    tableBody[i][j].margin = [0, 4];     // vertical padding for center feel
+                                                const tableBody = doc.content[1].table.body;
+                                                for (let i = 0; i < tableBody.length; i++) {
+                                                    for (let j = 0; j < tableBody[i].length; j++) {
+                                                        if (typeof tableBody[i][j] === 'object') {
+                                                            tableBody[i][j].alignment = 'left';
+                                                            tableBody[i][j].margin = [0, 4];
+                                                        }
+                                                    }
                                                 }
+
+                                                doc.content[1].layout = {
+                                                    hLineWidth: () => 0.5,
+                                                    vLineWidth: () => 0.5,
+                                                    hLineColor: () => '#aaa',
+                                                    vLineColor: () => '#aaa',
+                                                    paddingLeft: () => 4,
+                                                    paddingRight: () => 4,
+                                                    paddingTop: () => 2,
+                                                    paddingBottom: () => 2
+                                                };
                                             }
-
-                                            // Optional: shrink table to fit page if overflowing
-                                            doc.content[1].layout = {
-                                                hLineWidth: function () { return 0.5; },
-                                                vLineWidth: function () { return 0.5; },
-                                                hLineColor: function () { return '#aaa'; },
-                                                vLineColor: function () { return '#aaa'; },
-                                                paddingLeft: function () { return 4; },
-                                                paddingRight: function () { return 4; },
-                                                paddingTop: function () { return 2; },
-                                                paddingBottom: function () { return 2; }
-                                            };
-
                                         }
                                     },
                                     {
@@ -389,6 +434,8 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
         $scope.selectedDistrict = null;
         $scope.selectedBlock = null;
         $scope.selectedVillage = null;
+        $scope.TaskAssignedDate = null;
+        $scope.TaskEndDate = null;
         $('.fileinput').removeClass('fileinput-exists').addClass('fileinput-new');
         $('.fileinput .fileinput-filename').text('');
     }

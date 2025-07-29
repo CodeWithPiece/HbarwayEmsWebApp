@@ -28,7 +28,6 @@ taskModel.createTask = async (data) => {
             .input('AssignedBy', sql.BigInt, data.AssignedBy)
             .input('DistrictId', sql.Int, data.DistrictId)
             .input('BlockId', sql.Int, data.BlockId)
-            .input('VillageId', sql.Int, data.VillageId)
             .input('TaskName', sql.NVarChar(50), data.TaskName)
             .input('TaskDescription', sql.NVarChar(sql.MAX), data.TaskDescription)
             .input('SerialNumberFrom', sql.NVarChar(50), data.SerialNumberFrom)
@@ -37,8 +36,52 @@ taskModel.createTask = async (data) => {
             .input('TaskImage', sql.NVarChar(100), data.TaskImage)
             .input('TaskAssignedDate', sql.DateTime, data.TaskAssignedDate)
             .input('TaskEndDate', sql.DateTime, data.TaskEndDate)
-            .query(`INSERT INTO Emk_Tasks(UserId, AssignedBy, StateId, DistrictId, BlockId, VillageId, TaskName, TaskDescription, SerialNumberFrom, SerialNumberTo, TaskCount, TaskImage, TaskAssignedDate, TaskEndDate, IsActive, IsDeleted, CreatedOn, UpdatedOn)
-            VALUES (@UserId, @AssignedBy, 1, @DistrictId, @BlockId, @VillageId, @TaskName, @TaskDescription, @SerialNumberFrom, @SerialNumberTo, @TaskCount, @TaskImage, @TaskAssignedDate, @TaskEndDate, 1, 0, GETDATE(), GETDATE())`);
+            .query(`INSERT INTO Emk_Tasks(UserId, AssignedBy, StateId, DistrictId, BlockId, TaskName, TaskDescription, SerialNumberFrom, SerialNumberTo, TaskCount, TaskImage, TaskAssignedDate, TaskEndDate, IsActive, IsDeleted, CreatedOn, UpdatedOn)
+            VALUES (@UserId, @AssignedBy, 1, @DistrictId, @BlockId, @TaskName, @TaskDescription, @SerialNumberFrom, @SerialNumberTo, @TaskCount, @TaskImage, @TaskAssignedDate, @TaskEndDate, 1, 0, GETDATE(), GETDATE())`);
+        return result;
+    }
+};
+
+taskModel.updateTask = async (data) => {
+    const pool = await poolPromise;
+    if (pool) {
+        const request = pool.request()
+            .input('TaskId', sql.BigInt, data.TaskId)
+            .input('UserId', sql.BigInt, data.UserId)
+            .input('AssignedBy', sql.BigInt, data.AssignedBy)
+            .input('DistrictId', sql.Int, data.DistrictId)
+            .input('BlockId', sql.Int, data.BlockId)
+            .input('TaskName', sql.NVarChar(50), data.TaskName)
+            .input('TaskDescription', sql.NVarChar(sql.MAX), data.TaskDescription)
+            .input('SerialNumberFrom', sql.NVarChar(50), data.SerialNumberFrom)
+            .input('SerialNumberTo', sql.NVarChar(50), data.SerialNumberTo)
+            .input('TaskCount', sql.Int, data.TaskCount)
+            .input('TaskAssignedDate', sql.DateTime, data.TaskAssignedDate)
+            .input('TaskEndDate', sql.DateTime, data.TaskEndDate);
+
+        if (data.TaskImage && data.TaskImage !== '') {
+            request.input('TaskImage', sql.NVarChar(100), data.TaskImage);
+        }
+
+        const updateQuery = `
+            UPDATE Emk_Tasks
+            SET 
+                UserId = @UserId,
+                AssignedBy = @AssignedBy,
+                DistrictId = @DistrictId,
+                BlockId = @BlockId,
+                TaskName = @TaskName,
+                TaskDescription = @TaskDescription,
+                SerialNumberFrom = @SerialNumberFrom,
+                SerialNumberTo = @SerialNumberTo,
+                TaskCount = @TaskCount,
+                ${data.TaskImage && data.TaskImage !== '' ? 'TaskImage = @TaskImage,' : ''}
+                TaskAssignedDate = @TaskAssignedDate,
+                TaskEndDate = @TaskEndDate,
+                UpdatedOn = GETDATE()
+            WHERE TaskId = @TaskId`;
+
+        const result = await request.query(updateQuery);
         return result;
     }
 };
@@ -59,7 +102,7 @@ taskModel.getTasks = async () => {
     const pool = await poolPromise;
     if (pool) {
         const result = await pool.request()
-            .query('SELECT t1.TaskId, t1.TaskName, t1.TaskDescription, t2.UserName AS AssignedTo, t3.UserName AS AssignedBy, t4.Title AS DistrictName, t5.Title AS BlockName, t6.Title AS VillageName, SerialNumberFrom, SerialNumberTo, TaskCount, TaskImage, CONVERT(VARCHAR(10), t1.TaskAssignedDate, 120) AS TaskAssignedDate, CONVERT(VARCHAR(10), t1.TaskEndDate, 120) AS TaskEndDate FROM Emk_Tasks t1 LEFT JOIN Emk_Users t2 ON t1.UserId = t2.UserId LEFT JOIN Emk_Users t3 ON t1.AssignedBy = t3.UserId LEFT JOIN Emk_MasterDistricts t4 On t1.DistrictId = t4.Id LEFT JOIN Emk_MasterBlocks t5 ON t1.BlockId = t5.Id LEFT JOIN Emk_MasterVillages t6 ON t1.VillageId = t6.Id ORDER BY t1.TaskId DESC');
+            .query('SELECT t1.TaskId, t1.TaskName, t1.TaskDescription, t2.UserId AS AssignedToId, t2.UserName AS AssignedTo, t3.UserName AS AssignedBy, t4.Id AS DistrictId, t4.Title AS DistrictName, t5.Id AS BlockId, t5.Title AS BlockName, SerialNumberFrom, SerialNumberTo, TaskCount, TaskImage, CONVERT(VARCHAR(10), t1.TaskAssignedDate, 120) AS TaskAssignedDate, CONVERT(VARCHAR(10), t1.TaskEndDate, 120) AS TaskEndDate FROM Emk_Tasks t1 LEFT JOIN Emk_Users t2 ON t1.UserId = t2.UserId LEFT JOIN Emk_Users t3 ON t1.AssignedBy = t3.UserId LEFT JOIN Emk_MasterDistricts t4 On t1.DistrictId = t4.Id LEFT JOIN Emk_MasterBlocks t5 ON t1.BlockId = t5.Id ORDER BY t1.TaskId DESC');
         return result.recordset;
     }
 };

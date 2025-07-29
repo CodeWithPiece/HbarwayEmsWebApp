@@ -37,6 +37,15 @@ app.service('workAllotmentService', function () {
         });
     };
 
+    this.updateTask = async function (formData) {
+        return await axios.post(`${baseUrl}/task/update`, formData, {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+    };
+
     this.getTasks = async function (data) {
         return await axios.post(`${baseUrl}/task/getTasks`, data, {
             withCredentials: true,

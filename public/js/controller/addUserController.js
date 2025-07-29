@@ -97,8 +97,20 @@ app.controller('addUserController', async function ($scope, $rootScope, $timeout
                                 dom: '<"html5buttons"B>lTfgitp',
                                 buttons: [
                                     { extend: 'copy' },
-                                    { extend: 'csv', title: 'Users' },
-                                    { extend: 'excel', title: 'Users' },
+                                    {
+                                        extend: 'csv',
+                                        title: 'Users',
+                                        exportOptions: {
+                                            columns: 'th:not(.noExport)'
+                                        },
+                                    },
+                                    {
+                                        extend: 'excel',
+                                        title: 'Users',
+                                        exportOptions: {
+                                            columns: 'th:not(.noExport)'
+                                        },
+                                    },
                                     {
                                         extend: 'pdf',
                                         title: 'Users',
