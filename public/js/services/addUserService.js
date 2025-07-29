@@ -18,6 +18,14 @@ app.service('addUserService', function () {
         });
     };
 
+    this.updateUser = async function (data) {
+        return await axios.post(`${baseUrl}/user/update`, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    };
+
     this.getUsers = async function (data) {
         return await axios.post(`${baseUrl}/user/getUsers`, data, {
             withCredentials: true,

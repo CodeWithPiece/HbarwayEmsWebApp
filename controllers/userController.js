@@ -60,6 +60,20 @@ exports.userRegister = async (req, res) => {
 
 }
 
+exports.userUpdate = async (req, res) => {
+    try {
+        const response = await userModel.userUpdate(req.body);
+        if (response.rowsAffected && response.rowsAffected[0] === 1) {
+            return res.status(200).json({ status: true, message: "User update successfully." });
+        } else {
+            return res.status(400).json({ status: false, message: "User updation failed, please check all fields." });
+        }
+    } catch (err) {
+        return res.status(500).json({ status: false, message: `Internal server error: ${err.message}` });
+    }
+
+}
+
 exports.checkInAndOut = async (req, res) => {
     try {
         const response = await userModel.checkInAndOut(req.body);

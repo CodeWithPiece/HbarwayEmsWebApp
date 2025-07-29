@@ -156,7 +156,7 @@
                                     ng-class="{'has-error': registerForm.UserPassword.$touched && registerForm.UserPassword.$invalid}">
                                     <label class="control-label">Password</label>
                                     <input type="password" name="UserPassword" class="form-control"
-                                        ng-model="registerData.UserPassword" placeholder="Create Password" required>
+                                        ng-model="registerData.UserPassword" placeholder="Create Password">
                                 </div>
                             </div>
 
@@ -173,8 +173,12 @@
                             <!-- Buttons -->
                             <div class="m-t col-sm-12 text-center">
                                 <button class="btn btn-white" type="button" ng-click="clearData()">Cancel</button>
-                                <button class="btn btn-primary" type="submit" ng-disabled="registerForm.$invalid">Create
-                                    User</button>
+                                <!-- <button class="btn btn-primary" type="submit" ng-disabled="registerForm.$invalid">Create
+                                    User</button> -->
+
+                                <button type="submit" class="btn btn-primary" ng-disabled="registerForm.$invalid">
+                                    {{ UserId ? 'Update User' : 'Create User' }}
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -188,6 +192,8 @@
                                     <table class="table table-striped table-bordered table-hover dataTables-example">
                                         <thead>
                                             <tr>
+                                                <th style="display: none;" class="noExport">User Id</th>
+                                                <th style="display: none;" class="noExport">Role Id</th>
                                                 <th>Username</th>
                                                 <th>Email Address</th>
                                                 <th>Mobile Number</th>
@@ -198,6 +204,8 @@
                                         </thead>
                                         <tbody>
                                             <tr class="gradeX" ng-repeat="user in users track by $index">
+                                                <td style="display: none;">{{user.UserId}}</td>
+                                                <td style="display: none;">{{user.RoleId}}</td>
                                                 <td>{{user.UserName}}</td>
                                                 <td>{{user.UserEmailAddress}}</td>
                                                 <td>{{user.UserMobileNo}}</td>
@@ -205,14 +213,18 @@
                                                 <td>{{user.RoleName}}</td>
                                                 <td>
                                                     <div class="btn-group">
-                                                        <button class="btn-white btn btn-xs">Update
-                                                            <i class="fa fa-edit"></i></button>
+                                                        <button class="btn-white btn btn-xs"
+                                                            ng-click="editUser(user)">Update
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
                                                     </div>
                                                 </td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                <th style="display: none;" class="noExport">User Id</th>
+                                                <th style="display: none;" class="noExport">Role Id</th>
                                                 <th>Username</th>
                                                 <th>Email Address</th>
                                                 <th>Mobile Number</th>

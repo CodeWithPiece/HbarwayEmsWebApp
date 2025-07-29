@@ -52,6 +52,43 @@ userModel.userRegister = async (data) => {
     }
 };
 
+userModel.userUpdate = async (data) => {
+    const pool = await poolPromise;
+    if (pool) {
+        const request = pool.request()
+            .input('UserId', sql.Int, data.UserId)
+            .input('UserName', sql.NVarChar(50), data.UserName)
+            .input('UserMobileNo', sql.NVarChar(20), data.UserMobileNo)
+            .input('UserEmailAddress', sql.NVarChar(50), data.UserEmailAddress)
+            .input('UserAddress', sql.NVarChar(100), data.UserAddress)
+            .input('RoleId', sql.Int, data.RoleId);
+
+        let passwordSetClause = '';
+        if (data.UserPassword && data.UserPassword.trim() !== '') {
+            const hashedPassword = await hashPassword(data.UserPassword);
+            request.input('UserPassword', sql.NVarChar(200), hashedPassword);
+            passwordSetClause = 'UserPassword = @UserPassword,';
+        }
+
+        const query = `
+        UPDATE Emk_Users
+        SET
+            UserName = @UserName,
+            UserMobileNo = @UserMobileNo,
+            UserEmailAddress = @UserEmailAddress,
+            UserAddress = @UserAddress,
+            RoleId = @RoleId,
+            ${passwordSetClause}
+            UpdatedOn = GETDATE()
+        WHERE UserId = @UserId
+    `;
+
+        const result = await request.query(query);
+        return result;
+    }
+};
+
+
 userModel.checkInAndOut = async (data) => {
     const pool = await poolPromise;
     if (pool) {
@@ -78,7 +115,7 @@ userModel.getUsers = async (data) => {
         .input('PageNumber', sql.Int, data.PageNumber)
         .input('PageSize', sql.Int, data.PageSize)
         // .query('SELECT UserId, UserName, UserMobileNo, UserAddress, RoleId FROM Emk_Users WHERE IsActive = 1 AND IsDeleted = 0 ORDER BY UserId OFFSET (@PageNumber - 1) * @PageSize ROWS FETCH NEXT @PageSize ROWS ONLY');
-        .query('SELECT t1.UserId, t1.UserName, t1.UserMobileNo, t1.UserEmailAddress, t1.UserAddress, t2.RoleName FROM Emk_Users t1 LEFT JOIN Emk_Roles t2 ON t1.RoleId = t2.RoleId WHERE t1.RoleId != 1 AND t1.IsActive = 1 AND t1.IsDeleted = 0 ORDER BY UserId DESC');
+        .query('SELECT t1.UserId, t2.RoleId, t1.UserName, t1.UserMobileNo, t1.UserEmailAddress, t1.UserAddress, t2.RoleName FROM Emk_Users t1 LEFT JOIN Emk_Roles t2 ON t1.RoleId = t2.RoleId WHERE t1.RoleId != 1 AND t1.IsActive = 1 AND t1.IsDeleted = 0 ORDER BY UserId DESC');
     return result.recordset;
 }
 

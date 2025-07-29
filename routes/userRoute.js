@@ -5,6 +5,7 @@ const validateRequest = require('../middlewares/authMiddleware');
 
 router.post('/login', userController.userLogin);
 router.post('/register', userController.userRegister);
+router.post('/update', userController.userUpdate);
 router.post('/checkInAndOut', validateRequest, userController.checkInAndOut);
 router.post('/getStatus', validateRequest, userController.getUserStatus);
 router.post('/getUsersCount', validateRequest, userController.getTotalUserCount);

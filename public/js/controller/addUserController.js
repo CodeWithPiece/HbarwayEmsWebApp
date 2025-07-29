@@ -42,40 +42,87 @@ app.controller('addUserController', async function ($scope, $rootScope, $timeout
         }
     };
 
+    $scope.editUser = async function (user) {
+        $scope.UserId = user.UserId;
+        $scope.registerData.RoleId = user.RoleId;
+        $scope.registerData.UserName = user.UserName;
+        $scope.registerData.UserEmailAddress = user.UserEmailAddress;
+        $scope.registerData.UserMobileNo = user.UserMobileNo;
+        $scope.registerData.UserAddress = user.UserAddress;
+        $scope.selectedRole = $scope.users.find(u => u.RoleId === user.RoleId);
+    };
+
     $scope.registerUser = async function () {
-        await addUserService.registerUser($scope.registerData)
-            .then(function (response) {
-                if (response.data.status) {
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        showMethod: 'slideDown',
-                        timeOut: 1500,
-                        positionClass: 'toast-bottom-right'
-                    };
-                    toastr.success('Employee management system', `User registered successfully.`);
-                    $timeout(function () {
-                        $scope.clearData();
-                        $scope.getUsers();
-                    });
-                }
-            })
-            .catch(function (error) {
-                console.error('Login error:', error.response.data);
-                if (error.response.data.message.toLowerCase().includes("token")) {
-                    sessionStorage.removeItem('user');
-                    window.location.href = "/";
-                } else {
-                    toastr.options = {
-                        closeButton: true,
-                        progressBar: true,
-                        showMethod: 'slideDown',
-                        timeOut: 1500,
-                        positionClass: 'toast-bottom-right'
-                    };
-                    toastr.error('Employee management system', error.response.data.message);
-                }
-            });
+        if ($scope.UserId) {
+            await addUserService.updateUser({ ...$scope.registerData, UserId: $scope.UserId })
+                .then(function (response) {
+                    if (response.data.status) {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-right'
+                        };
+                        toastr.success('Employee management system', `User update successfully.`);
+                        $timeout(function () {
+                            $scope.clearData();
+                            $scope.getUsers();
+                            $scope.UserId = null;
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Login error:', error.response.data);
+                    if (error.response.data.message.toLowerCase().includes("token")) {
+                        sessionStorage.removeItem('user');
+                        window.location.href = "/";
+                    } else {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-right'
+                        };
+                        toastr.error('Employee management system', error.response.data.message);
+                    }
+                });
+        } else {
+            await addUserService.registerUser($scope.registerData)
+                .then(function (response) {
+                    if (response.data.status) {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-right'
+                        };
+                        toastr.success('Employee management system', `User registered successfully.`);
+                        $timeout(function () {
+                            $scope.clearData();
+                            $scope.getUsers();
+                        });
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Login error:', error.response.data);
+                    if (error.response.data.message.toLowerCase().includes("token")) {
+                        sessionStorage.removeItem('user');
+                        window.location.href = "/";
+                    } else {
+                        toastr.options = {
+                            closeButton: true,
+                            progressBar: true,
+                            showMethod: 'slideDown',
+                            timeOut: 1500,
+                            positionClass: 'toast-bottom-right'
+                        };
+                        toastr.error('Employee management system', error.response.data.message);
+                    }
+                });
+        }
     }
 
     $scope.getUsers = async function () {
