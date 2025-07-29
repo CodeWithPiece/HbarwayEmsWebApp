@@ -1,6 +1,6 @@
 app.controller('workAllotmentController', async function ($scope, $rootScope, $timeout, workAllotmentService, addUserService) {
 
-    // $scope.todayDate = new Date().toISOString().split("T")[0];
+    $scope.todayDate = new Date().toISOString().split("T")[0];
 
     $scope.getUsers = async function () {
         await addUserService.getUsers({ Id: $rootScope.currentUser.UserId, PageNumber: 0, PageSize: 0 })
