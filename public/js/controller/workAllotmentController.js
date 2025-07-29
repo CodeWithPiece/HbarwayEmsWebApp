@@ -117,13 +117,13 @@ app.controller('workAllotmentController', async function ($scope, $rootScope, $t
         $scope.TaskAssignedDate = new Date(task.TaskAssignedDate);
         $scope.TaskEndDate = new Date(task.TaskEndDate);
         $scope.DistrictId = task.DistrictId;
-        $scope.BlockId = task.BlockId;
         $scope.selectedUser = $scope.users.find(u => u.UserId === task.AssignedToId);
         $scope.selectedDistrict = $scope.districts.find(d => d.Id === task.DistrictId);
         $scope.getBlocksByDistrict(task.DistrictId);
         $timeout(function () {
+            $scope.BlockId = task.BlockId;
             $scope.selectedBlock = $scope.blocks.find(d => d.Id === task.BlockId);
-        }, 100);
+        }, 200);
     };
 
     $scope.createTask = async function () {
