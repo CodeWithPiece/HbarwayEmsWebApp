@@ -212,7 +212,8 @@
                                     ng-class="{'has-error': taskForm.TaskAssignedDate.$touched && !TaskAssignedDate}">
                                     <label class="control-label">Task Assigned Date</label>
                                     <input type="date" class="form-control" name="TaskAssignedDate"
-                                        ng-model="TaskAssignedDate" min="{{ todayDate }}">
+                                        ng-model="TaskAssignedDate">
+                                    <!-- min="{{ todayDate }}" -->
                                 </div>
                             </div>
                             <!-- Task End Date -->
@@ -220,8 +221,8 @@
                                 <div class="form-group"
                                     ng-class="{'has-error': taskForm.TaskEndDate.$touched && !TaskEndDate}">
                                     <label class="control-label">Task End Date</label>
-                                    <input type="date" class="form-control" name="TaskEndDate" ng-model="TaskEndDate"
-                                        min="{{ todayDate }}">
+                                    <input type="date" class="form-control" name="TaskEndDate" ng-model="TaskEndDate">
+                                    <!-- min="{{ todayDate }}" -->
                                 </div>
                             </div>
                             <!-- Submit -->
