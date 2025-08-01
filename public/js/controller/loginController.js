@@ -9,7 +9,7 @@ app.controller('loginController', function ($scope, authService) {
         await authService.doLogin($scope.formData)
             .then(function (response) {
                 if (response.data.status) {
-                    if (response.data.data.RoleId === 1) {
+                    if (response.data.data.RoleId === 1 || response.data.data.RoleId === 3) {
                         sessionStorage.setItem('user', JSON.stringify(response.data.data));
                         toastr.options = {
                             closeButton: true,
