@@ -10,7 +10,7 @@ router.post('/checkInAndOut', userController.checkInAndOut);
 router.post('/getStatus', userController.getUserStatus);
 router.post('/getUsersCount', validateRequest, userController.getTotalUserCount);
 router.post('/getUsers', validateRequest, userController.getUsers);
-router.post('/logout', validateRequest, userController.userLogout);
+router.post('/logout', userController.userLogout);
 router.post('/attendance', validateRequest, userController.getUsersAttendace);
 
 
